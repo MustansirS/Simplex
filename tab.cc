@@ -20,6 +20,10 @@ static vector<int> nextbasis(vector<int> &b) {
 
 Simplex::Simplex(Matrix &A, Matrix &b, Matrix &c, bool showSteps, ld val) : A{A}, b{b}, c{c}, bfs{c}, objective{val}, showSteps{showSteps} {
 	for (int i = 0; i < A.r; ++i) {
+		if (b.m[i][0] < 0) {
+			b.rowOp(-1,1,i,0,1,i);
+			A.rowOp(-1,1,i,0,1,i);
+		}
 		basis.push_back(i);
 	}
 }
@@ -76,16 +80,17 @@ void Simplex::operation() {
 		}
 	}
 	if (entering == -1) {
-		if (feasible == false) {
-			for (int i = 0; i < A.r; ++i) {
-				if (b.m[i][0] < 0) {
-					b.m[i][0] *= -1;
-					A.rowOp(-1,1,i,0,1,i);
-				}
-			}
-			canonical(basis);
-		}
-		throw Exception{"Error!"};
+		// if (feasible == false) {
+		// 	for (int i = 0; i < A.r; ++i) {
+		// 		if (b.m[i][0] < 0) {
+		// 			b.m[i][0] *= -1;
+		// 			A.rowOp(-1,1,i,0,1,i);
+		// 		}
+		// 	}
+		// 	canonical(basis);
+			return;
+		// }
+		// throw Exception{"Error!"};
 	}
 	int pos = -1;
 	ld minpos{0};
